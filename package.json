@@ -1,0 +1,13 @@
+{
+  "name": "kuzeypet-yeni-musteri-formu",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Kuzeypet mobil yeni müşteri kayıt formu - Cloudflare Worker ve Brevo entegrasyonu",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
