@@ -16,7 +16,82 @@ function validate(data){$$('.invalid').forEach(x=>x.classList.remove('invalid'))
 function safeName(s){return s.normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,80)||'Yeni_Musteri'}
 function drawWrapped(ctx,text,x,y,maxWidth,lineHeight){const words=String(text??'').split(/\s+/);let line='',lines=[];for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=w}else line=test}if(line)lines.push(line);for(const l of lines){ctx.fillText(l,x,y);y+=lineHeight}return y}
 async function loadImage(src){return new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=src})}
-async function makePdf(data,files){const W=1240,H=1754,pages=[],logo=await loadImage('assets/kuzeypet-logo.png');const newPage=()=>{const c=document.createElement('canvas');c.width=W;c.height=H;const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.drawImage(logo,65,45,390,100);ctx.fillStyle='#e52528';ctx.fillRect(65,165,W-130,8);ctx.fillStyle='#2d3348';ctx.font='bold 34px Arial';ctx.fillText('YENİ MÜŞTERİ KAYIT FORMU',65,225);pages.push(c);return{c,ctx,y:275}};let p=newPage();const row=(label,val)=>{p.ctx.font='bold 19px Arial';p.ctx.fillStyle='#2d3348';p.ctx.fillText(label,65,p.y);p.ctx.font='18px Arial';p.y=drawWrapped(p.ctx,String(val||'-'),420,p.y,750,25)+10;if(p.y>1570)p=newPage()};row('Firma Türü',data.firmType);row('İşletme Tipi',data.businessTypes.join(', ')+(data.businessOther?` (${data.businessOther})`:''));[['İşletme Tabela Adı','tradeName'],['İşletme Sahibi','ownerName'],['İşletme Sahibi Telefon','ownerPhone'],['İşletme Ortakları','partnersName'],['Ortaklar Telefon','partnersPhone'],['Yetkili Satış Sorumlusu','salesContact'],['Satış Sorumlusu Telefon','salesPhone'],['İmza Yetkilisi','signatoryName'],['İmza Yetkilisi Telefon','signatoryPhone'],['Ödeme Yetkilisi','paymentContact'],['Ödeme Yetkilisi Telefon','paymentPhone'],['Resmi Yazışma Maili','officialEmail'],['Alternatif Mail','alternateEmail'],['Satış Temsilcisi','salesRepresentative'],['Müşteri Sınıfı','customerClass'],['Vade','term'],['Risk Limiti','riskLimit'],['Ziyaret Sıklığı',null],['Ziyaret Günü','visitDay'],['Koordinat 1',null],['Koordinat 2',null],['Koordinat 3',null],['Form Tarihi','formDate']].forEach(([l,k])=>row(l,k?data[k]:(l==='Ziyaret Sıklığı'?data.visitFrequencies.join(', ')+(data.visitOther?` (${data.visitOther})`:''):l==='Koordinat 1'?`${data.coord1x}, ${data.coord1y}`:l==='Koordinat 2'?(data.coord2x?`${data.coord2x}, ${data.coord2y}`:'-'):(data.coord3x?`${data.coord3x}, ${data.coord3y}`:'-'))));p=newPage();p.ctx.font='bold 26px Arial';p.ctx.fillText('EKLENEN EVRAKLAR',65,p.y);p.y+=45;files.forEach((x,i)=>row(`${i+1}. ${x.type}`,`${x.file.name} (${formatBytes(x.file.size)})`));if(p.y>1050)p=newPage();p.ctx.font='bold 22px Arial';p.ctx.fillText('Cari açılış onaylayan',65,p.y);p.ctx.fillText('Görüşmeyi yapan',650,p.y);p.y+=35;p.ctx.font='18px Arial';p.ctx.fillText(data.approverName,65,p.y);p.ctx.fillText(data.interviewerName,650,p.y);p.ctx.drawImage($('#approverSignature'),65,p.y+25,480,220);p.ctx.drawImage($('#interviewerSignature'),650,p.y+25,480,220);return pdfFromJpegs(pages.map(c=>dataUrlBytes(c.toDataURL('image/jpeg',.84))))}
+async function makePdf(data,files){
+  const W=1240,H=1754,pages=[],logo=await loadImage('assets/kuzeypet-logo.png');
+  const PAGE_BOTTOM=1580;
+  const newPage=()=>{
+    const c=document.createElement('canvas');
+    c.width=W;c.height=H;
+    const ctx=c.getContext('2d');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+    ctx.drawImage(logo,65,45,390,100);
+    ctx.fillStyle='#e52528';ctx.fillRect(65,165,W-130,8);
+    ctx.fillStyle='#2d3348';ctx.font='bold 34px Arial';
+    ctx.fillText('YENİ MÜŞTERİ KAYIT FORMU',65,225);
+    pages.push(c);
+    return{c,ctx,y:275};
+  };
+  const wrappedLines=(ctx,text,maxWidth)=>{
+    const words=String(text??'-').split(/\s+/).filter(Boolean),lines=[];
+    let line='';
+    for(const word of words){
+      const test=line?`${line} ${word}`:word;
+      if(line&&ctx.measureText(test).width>maxWidth){lines.push(line);line=word}else line=test;
+    }
+    if(line)lines.push(line);
+    return lines.length?lines:['-'];
+  };
+  let p=newPage();
+  const ensureSpace=height=>{if(p.y+height>PAGE_BOTTOM)p=newPage()};
+  const row=(label,val)=>{
+    p.ctx.font='18px Arial';
+    const lines=wrappedLines(p.ctx,String(val||'-'),750);
+    const height=Math.max(35,lines.length*25+12);
+    ensureSpace(height);
+    p.ctx.fillStyle='#2d3348';p.ctx.font='bold 19px Arial';
+    p.ctx.fillText(label,65,p.y);
+    p.ctx.font='18px Arial';
+    let yy=p.y;
+    for(const line of lines){p.ctx.fillText(line,420,yy);yy+=25}
+    p.y+=height;
+  };
+  row('Firma Türü',data.firmType);
+  row('İşletme Tipi',data.businessTypes.join(', ')+(data.businessOther?` (${data.businessOther})`:''));
+  [['İşletme Tabela Adı','tradeName'],['İşletme Sahibi','ownerName'],['İşletme Sahibi Telefon','ownerPhone'],['İşletme Ortakları','partnersName'],['Ortaklar Telefon','partnersPhone'],['Yetkili Satış Sorumlusu','salesContact'],['Satış Sorumlusu Telefon','salesPhone'],['İmza Yetkilisi','signatoryName'],['İmza Yetkilisi Telefon','signatoryPhone'],['Ödeme Yetkilisi','paymentContact'],['Ödeme Yetkilisi Telefon','paymentPhone'],['Resmi Yazışma Maili','officialEmail'],['Alternatif Mail','alternateEmail'],['Satış Temsilcisi','salesRepresentative'],['Müşteri Sınıfı','customerClass'],['Vade','term'],['Risk Limiti','riskLimit'],['Ziyaret Sıklığı',null],['Ziyaret Günü','visitDay'],['Koordinat 1',null],['Koordinat 2',null],['Koordinat 3',null],['Form Tarihi','formDate']].forEach(([l,k])=>row(l,k?data[k]:(l==='Ziyaret Sıklığı'?data.visitFrequencies.join(', ')+(data.visitOther?` (${data.visitOther})`:''):l==='Koordinat 1'?`${data.coord1x}, ${data.coord1y}`:l==='Koordinat 2'?(data.coord2x?`${data.coord2x}, ${data.coord2y}`:'-'):(data.coord3x?`${data.coord3x}, ${data.coord3y}`:'-'))));
+
+  p=newPage();
+  p.ctx.fillStyle='#2d3348';p.ctx.font='bold 26px Arial';
+  p.ctx.fillText('EKLENEN EVRAKLAR',65,p.y);p.y+=48;
+  const documentRow=(item,index)=>{
+    p.ctx.font='bold 19px Arial';
+    const typeLines=wrappedLines(p.ctx,`${index+1}. ${item.type}`,1080);
+    p.ctx.font='17px Arial';
+    const fileLines=wrappedLines(p.ctx,`${item.file.name} (${formatBytes(item.file.size)})`,1045);
+    const height=typeLines.length*26+fileLines.length*23+28;
+    ensureSpace(height);
+    p.ctx.fillStyle='#2d3348';p.ctx.font='bold 19px Arial';
+    let yy=p.y;
+    for(const line of typeLines){p.ctx.fillText(line,65,yy);yy+=26}
+    p.ctx.fillStyle='#5b6274';p.ctx.font='17px Arial';
+    yy+=2;
+    for(const line of fileLines){p.ctx.fillText(line,95,yy);yy+=23}
+    p.ctx.strokeStyle='#d9dce4';p.ctx.lineWidth=1;
+    p.ctx.beginPath();p.ctx.moveTo(65,yy+8);p.ctx.lineTo(W-65,yy+8);p.ctx.stroke();
+    p.y+=height;
+  };
+  files.forEach(documentRow);
+
+  ensureSpace(345);
+  p.ctx.fillStyle='#2d3348';p.ctx.font='bold 22px Arial';
+  p.ctx.fillText('Cari açılış onaylayan',65,p.y);
+  p.ctx.fillText('Görüşmeyi yapan',650,p.y);
+  p.y+=35;p.ctx.font='18px Arial';
+  p.ctx.fillText(data.approverName,65,p.y);
+  p.ctx.fillText(data.interviewerName,650,p.y);
+  p.ctx.drawImage($('#approverSignature'),65,p.y+25,480,220);
+  p.ctx.drawImage($('#interviewerSignature'),650,p.y+25,480,220);
+  return pdfFromJpegs(pages.map(c=>dataUrlBytes(c.toDataURL('image/jpeg',.84))));
+}
 function dataUrlBytes(url){const b=atob(url.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
 function pdfFromJpegs(jpegs){const enc=new TextEncoder(),parts=[],offsets=[0];let len=0;const add=x=>{const a=typeof x==='string'?enc.encode(x):x;parts.push(a);len+=a.length};add('%PDF-1.4\n%âãÏÓ\n');const obj=(n,body)=>{offsets[n]=len;add(`${n} 0 obj\n${body}\nendobj\n`)};const n=jpegs.length,objCount=2+n*3;obj(1,'<< /Type /Catalog /Pages 2 0 R >>');obj(2,`<< /Type /Pages /Count ${n} /Kids [${Array.from({length:n},(_,i)=>`${3+i*3} 0 R`).join(' ')}] >>`);jpegs.forEach((jpg,i)=>{const page=3+i*3,img=page+1,content=page+2;obj(page,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im${i} ${img} 0 R >> >> /Contents ${content} 0 R >>`);offsets[img]=len;add(`${img} 0 obj\n<< /Type /XObject /Subtype /Image /Width 1240 /Height 1754 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`);add(jpg);add('\nendstream\nendobj\n');const stream=`q\n595 0 0 842 0 0 cm\n/Im${i} Do\nQ`;obj(content,`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`)});const xref=len;add(`xref\n0 ${objCount+1}\n0000000000 65535 f \n`);for(let i=1;i<=objCount;i++)add(String(offsets[i]).padStart(10,'0')+' 00000 n \n');add(`trailer\n<< /Size ${objCount+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);return new Blob(parts,{type:'application/pdf'})}
 const crcTable=(()=>{let t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();function crc32(a){let c=0xffffffff;for(const b of a)c=crcTable[(c^b)&255]^(c>>>8);return(c^0xffffffff)>>>0}function u16(n){return new Uint8Array([n&255,n>>>8&255])}function u32(n){return new Uint8Array([n&255,n>>>8&255,n>>>16&255,n>>>24&255])}
