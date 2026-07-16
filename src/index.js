@@ -45,9 +45,7 @@ async function submitForm(request, env) {
     if (!(pdf instanceof File) || pdf.size === 0 || pdf.type !== "application/pdf") {
       return json({ error: "PDF dosyası alınamadı veya geçersiz." }, 400, request);
     }
-    if (!(zip instanceof File) || zip.size === 0) {
-      return json({ error: "Evrak ZIP dosyası alınamadı." }, 400, request);
-    }
+    const hasZip = zip instanceof File && zip.size > 0;
 
     let metadata;
     try {
@@ -62,15 +60,13 @@ async function submitForm(request, env) {
       return json({ error: "İşletme tabela adı veya form tarihi eksik." }, 400, request);
     }
 
-    const totalBytes = pdf.size + zip.size;
+    const totalBytes = pdf.size + (hasZip ? zip.size : 0);
     if (totalBytes > MAX_ATTACHMENT_BYTES) {
       return json({ error: "PDF ve ZIP toplamı 15 MB sınırını aşmaktadır." }, 413, request);
     }
 
-    const [pdfContent, zipContent] = await Promise.all([
-      fileToBase64(pdf),
-      fileToBase64(zip),
-    ]);
+    const pdfContent = await fileToBase64(pdf);
+    const zipContent = hasZip ? await fileToBase64(zip) : null;
 
     const subject = `Yeni Müşteri Kaydı - ${tradeName} - ${formatDateTR(formDate)}`;
     const senderName = cleanText(env.BREVO_SENDER_NAME || "Kuzeypet Cari Evrak", 100);
@@ -85,7 +81,7 @@ async function submitForm(request, env) {
       htmlContent: buildEmailHtml(metadata, tradeName, formDate),
       attachment: [
         { name: safeAttachmentName(pdf.name, `${tradeName}_${formDate}.pdf`), content: pdfContent },
-        { name: safeAttachmentName(zip.name, `${tradeName}_${formDate}_Evraklar.zip`), content: zipContent },
+        ...(hasZip ? [{ name: safeAttachmentName(zip.name, `${tradeName}_${formDate}_Evraklar.zip`), content: zipContent }] : []),
       ],
     };
 
@@ -141,7 +137,7 @@ function buildEmailHtml(metadata, tradeName, formDate) {
   return `
     <div style="font-family:Arial,sans-serif;color:#2d3348;line-height:1.5">
       <h2 style="color:#e52528;margin-bottom:8px">Yeni Müşteri Kayıt Formu</h2>
-      <p>Yeni müşteri kayıt formu ve zorunlu evraklar ekte iletilmiştir.</p>
+      <p>Yeni müşteri kayıt formu ekte iletilmiştir. Evrak yükleme isteğe bağlıdır; eklenmiş evrak varsa ZIP dosyası ayrıca ektedir.</p>
       <table style="border-collapse:collapse;width:100%;max-width:680px">
         ${emailRow("İşletme Tabela Adı", escapeHtml(tradeName))}
         ${emailRow("Form Tarihi", escapeHtml(formatDateTR(formDate)))}

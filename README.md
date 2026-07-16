@@ -65,3 +65,9 @@ musterikayit/
 ## Önemli
 
 Brevo API anahtarını hiçbir zaman `app.js`, HTML veya GitHub içine yazmayın. Yalnızca Cloudflare **Secret** olarak ekleyin.
+
+
+## Güncelleme
+- Şirket ve şahıs firması evrak yüklemeleri isteğe bağlıdır.
+- Evrak eklenmezse yalnızca PDF gönderilir; evrak eklenirse PDF ile birlikte ZIP gönderilir.
+- Müşteri Kayıt Formu logosu üst bölümün sağ tarafına eklenmiştir.

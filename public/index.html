@@ -10,7 +10,8 @@
 <body>
   <header class="topbar">
     <img src="assets/kuzeypet-logo.png" alt="Kuzeypet" class="logo">
-    <div><h1>Yeni Müşteri Kayıt Formu</h1><p>Mobil cari açılış ve evrak gönderim ekranı</p></div>
+    <div class="topbar-title"><h1>Yeni Müşteri Kayıt Formu</h1><p>Mobil cari açılış ve evrak gönderim ekranı</p></div>
+    <img src="assets/musterikayitlogo.png" alt="Müşteri Kayıt Formu" class="form-logo">
   </header>
 
   <main class="wrap">
@@ -83,14 +84,16 @@
       </section>
 
       <section class="card upload-card" id="companyDocsSection">
-        <h2>4A. Şirketlerde Gerekli Evraklar (ZORUNLU)</h2>
+        <h2>4A. Şirketlerde Gerekli Evraklar (İSTEĞE BAĞLI)</h2>
+        <p class="hint upload-note">Aşağıdaki evrakların yüklenmesi isteğe bağlıdır. Bir veya birden fazla dosya ekleyebilirsiniz.</p>
         <ol id="companyDocList"></ol>
         <label class="upload-btn"><input id="companyFiles" type="file" multiple hidden>Dosyaları Seç / Ekle</label>
         <div id="companyFilesView" class="file-view"></div>
       </section>
 
       <section class="card upload-card" id="soleDocsSection">
-        <h2>4B. Şahıs Firmalarında Gerekli Evraklar (ZORUNLU)</h2>
+        <h2>4B. Şahıs Firmalarında Gerekli Evraklar (İSTEĞE BAĞLI)</h2>
+        <p class="hint upload-note">Aşağıdaki evrakların yüklenmesi isteğe bağlıdır. Bir veya birden fazla dosya ekleyebilirsiniz.</p>
         <ol id="soleDocList"></ol>
         <label class="upload-btn"><input id="soleFiles" type="file" multiple hidden>Dosyaları Seç / Ekle</label>
         <div id="soleFilesView" class="file-view"></div>
@@ -116,12 +119,12 @@
       </section>
 
       <section class="card consent">
-        <label><input id="accuracyConsent" type="checkbox" required> Form bilgilerinin doğru olduğunu ve gerekli evrakların eksiksiz eklendiğini onaylıyorum. <span>*</span></label>
+        <label><input id="accuracyConsent" type="checkbox" required> Form bilgilerinin doğru olduğunu onaylıyorum. Evrak yüklemenin isteğe bağlı olduğunu biliyorum. <span>*</span></label>
       </section>
 
       <div id="status" role="status" aria-live="polite"></div>
       <button id="submitBtn" type="submit" class="submit">FORMU KAYDET VE GÖNDER</button>
-      <p class="limit">PDF ve ZIP dahil toplam ek boyutu 15 MB'ı geçemez.</p>
+      <p class="limit">Evrak eklenirse PDF ve ZIP dahil toplam ek boyutu 15 MB'ı geçemez.</p>
     </form>
   </main>
   <script src="app.js"></script>
