@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#e52528">
+  <title>Yeni Müşteri Kayıt Formu</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <img src="assets/kuzeypet-logo.png" alt="Kuzeypet" class="logo">
+    <div><h1>Yeni Müşteri Kayıt Formu</h1><p>Mobil cari açılış ve evrak gönderim ekranı</p></div>
+  </header>
+
+  <main class="wrap">
+    <form id="customerForm" novalidate>
+      <section class="card">
+        <h2>1. İşletme Bilgileri</h2>
+        <div class="field">
+          <label>Firma türü <span>*</span></label>
+          <div class="segmented">
+            <label><input type="radio" name="firmType" value="Şirket" required><b>Şirket</b></label>
+            <label><input type="radio" name="firmType" value="Şahıs Firması" required><b>Şahıs Firması</b></label>
+          </div>
+        </div>
+        <div class="field">
+          <label>İşletme tipi <span>*</span> <small>(Birden fazla seçilebilir)</small></label>
+          <div class="checks" id="businessTypes">
+            <label><input type="checkbox" value="Veteriner Kliniği">Veteriner Kliniği</label>
+            <label><input type="checkbox" value="Petshop">Petshop</label>
+            <label><input type="checkbox" value="E-Ticaret">E-Ticaret</label>
+            <label><input type="checkbox" value="Diğer" data-other-target="businessOther">Diğer</label>
+          </div>
+          <input id="businessOther" type="text" placeholder="Diğer işletme tipini yazınız" disabled>
+        </div>
+        <div class="grid two">
+          <div class="field"><label>İşletme Tabela Adı <span>*</span></label><input name="tradeName" required></div>
+          <div class="field"><label>İşletme Sahibi Ad-Soyad <span>*</span></label><input name="ownerName" required></div>
+          <div class="field"><label>İşletme Sahibi Telefon No <span>*</span></label><input name="ownerPhone" type="tel" inputmode="tel" required></div>
+          <div class="field"><label>İşletme Ortakları Ad-Soyad <span>*</span></label><input name="partnersName" required placeholder="Ortak yoksa 'Yok' yazınız"></div>
+          <div class="field"><label>Ortaklar Telefon No <span>*</span></label><input name="partnersPhone" required placeholder="Ortak yoksa 'Yok' yazınız"></div>
+          <div class="field"><label>Yetkili Satış Sorumlusu <span>*</span></label><input name="salesContact" required></div>
+          <div class="field"><label>Satış Sorumlusu Telefon No <span>*</span></label><input name="salesPhone" type="tel" required></div>
+          <div class="field"><label>İmza Yetkilisi Ad-Soyad <span>*</span></label><input name="signatoryName" required></div>
+          <div class="field"><label>İmza Yetkilisi Telefon No <span>*</span></label><input name="signatoryPhone" type="tel" required></div>
+          <div class="field"><label>Ödeme Yetkilisi Ad-Soyad <span>*</span></label><input name="paymentContact" required></div>
+          <div class="field"><label>Ödeme Yetkilisi Telefon No <span>*</span></label><input name="paymentPhone" type="tel" required></div>
+          <div class="field"><label>Resmi Yazışma Mail Adresi <span>*</span></label><input name="officialEmail" type="email" required></div>
+          <div class="field"><label>Alternatif Mail Adresi <span>*</span></label><input name="alternateEmail" type="email" required></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. Cari Açılış Koşulları</h2>
+        <div class="grid two">
+          <div class="field"><label>Satış Temsilcisi <span>*</span></label><input name="salesRepresentative" required></div>
+          <div class="field"><label>Müşteri Sınıfı <span>*</span></label><input name="customerClass" required></div>
+          <div class="field"><label>Vade <span>*</span></label><input name="term" required placeholder="Örn. 30 gün"></div>
+          <div class="field"><label>Risk Limiti <span>*</span></label><input name="riskLimit" inputmode="decimal" required></div>
+        </div>
+        <div class="field">
+          <label>Ziyaret sıklığı <span>*</span> <small>(Birden fazla seçilebilir)</small></label>
+          <div class="checks" id="visitFrequencies">
+            <label><input type="checkbox" value="Haftada bir">Haftada bir</label>
+            <label><input type="checkbox" value="Ayda bir">Ayda bir</label>
+            <label><input type="checkbox" value="İki haftada bir">İki haftada bir</label>
+            <label><input type="checkbox" value="Diğer" data-other-target="visitOther">Diğer</label>
+          </div>
+          <input id="visitOther" type="text" placeholder="Diğer ziyaret sıklığını yazınız" disabled>
+        </div>
+        <div class="field"><label>Ziyaret Günü <span>*</span></label>
+          <select name="visitDay" required><option value="">Seçiniz</option><option>Pazartesi</option><option>Salı</option><option>Çarşamba</option><option>Perşembe</option><option>Cuma</option><option>Cumartesi</option><option>Pazar</option><option>Değişken</option></select>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>3. Google Koordinat Bilgileri</h2>
+        <p class="hint">İş yeri ve depo adreslerinin Google koordinatlarını giriniz. İlk koordinat zorunludur; 2 ve 3 isteğe bağlıdır.</p>
+        <div class="coord"><b>Koordinat 1 *</b><input name="coord1x" required placeholder="X / Enlem"><input name="coord1y" required placeholder="Y / Boylam"></div>
+        <div class="coord"><b>Koordinat 2</b><input name="coord2x" placeholder="X / Enlem"><input name="coord2y" placeholder="Y / Boylam"></div>
+        <div class="coord"><b>Koordinat 3</b><input name="coord3x" placeholder="X / Enlem"><input name="coord3y" placeholder="Y / Boylam"></div>
+      </section>
+
+      <section class="card upload-card" id="companyDocsSection">
+        <h2>4A. Şirketlerde Gerekli Evraklar (ZORUNLU)</h2>
+        <ol id="companyDocList"></ol>
+        <label class="upload-btn"><input id="companyFiles" type="file" multiple hidden>Dosyaları Seç / Ekle</label>
+        <div id="companyFilesView" class="file-view"></div>
+      </section>
+
+      <section class="card upload-card" id="soleDocsSection">
+        <h2>4B. Şahıs Firmalarında Gerekli Evraklar (ZORUNLU)</h2>
+        <ol id="soleDocList"></ol>
+        <label class="upload-btn"><input id="soleFiles" type="file" multiple hidden>Dosyaları Seç / Ekle</label>
+        <div id="soleFilesView" class="file-view"></div>
+      </section>
+
+      <section class="card">
+        <h2>5. Tarih ve Dijital İmzalar</h2>
+        <div class="field"><label>Form Tarihi <span>*</span></label><input id="formDate" name="formDate" type="date" required readonly aria-readonly="true" title="Form tarihi otomatik olarak belirlenir"></div>
+        <div class="sign-grid">
+          <div class="signature-box">
+            <label>Cari açılış onaylayan (İsim & İmza) <span>*</span></label>
+            <input name="approverName" required placeholder="Ad Soyad">
+            <canvas id="approverSignature"></canvas>
+            <button type="button" class="secondary clear-sign" data-canvas="approverSignature">İmzayı Temizle</button>
+          </div>
+          <div class="signature-box">
+            <label>Görüşmeyi yapan (İsim & İmza) <span>*</span></label>
+            <input name="interviewerName" required placeholder="Ad Soyad">
+            <canvas id="interviewerSignature"></canvas>
+            <button type="button" class="secondary clear-sign" data-canvas="interviewerSignature">İmzayı Temizle</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card consent">
+        <label><input id="accuracyConsent" type="checkbox" required> Form bilgilerinin doğru olduğunu ve gerekli evrakların eksiksiz eklendiğini onaylıyorum. <span>*</span></label>
+      </section>
+
+      <div id="status" role="status" aria-live="polite"></div>
+      <button id="submitBtn" type="submit" class="submit">FORMU KAYDET VE GÖNDER</button>
+      <p class="limit">PDF ve ZIP dahil toplam ek boyutu 15 MB'ı geçemez.</p>
+    </form>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
