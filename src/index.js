@@ -54,10 +54,10 @@ async function submitForm(request, env) {
       return json({ error: "Form bilgileri okunamadı." }, 400, request);
     }
 
-    const tradeName = cleanText(metadata.tradeName, 160);
+    const tradeName = cleanText(metadata.tradeName, 160) || "Belirtilmedi";
     const formDate = cleanDate(metadata.formDate);
-    if (!tradeName || !formDate) {
-      return json({ error: "İşletme tabela adı veya form tarihi eksik." }, 400, request);
+    if (!formDate) {
+      return json({ error: "Form tarihi eksik." }, 400, request);
     }
 
     const totalBytes = pdf.size + (hasZip ? zip.size : 0);

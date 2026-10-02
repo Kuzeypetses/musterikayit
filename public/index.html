@@ -19,14 +19,14 @@
       <section class="card">
         <h2>1. İşletme Bilgileri</h2>
         <div class="field">
-          <label>Firma türü <span>*</span></label>
+          <label>Firma türü</label>
           <div class="segmented">
-            <label><input type="radio" name="firmType" value="Şirket" required><b>Şirket</b></label>
-            <label><input type="radio" name="firmType" value="Şahıs Firması" required><b>Şahıs Firması</b></label>
+            <label><input type="radio" name="firmType" value="Şirket"><b>Şirket</b></label>
+            <label><input type="radio" name="firmType" value="Şahıs Firması"><b>Şahıs Firması</b></label>
           </div>
         </div>
         <div class="field">
-          <label>İşletme tipi <span>*</span> <small>(Birden fazla seçilebilir)</small></label>
+          <label>İşletme tipi <small>(Birden fazla seçilebilir)</small></label>
           <div class="checks" id="businessTypes">
             <label><input type="checkbox" value="Veteriner Kliniği">Veteriner Kliniği</label>
             <label><input type="checkbox" value="Petshop">Petshop</label>
@@ -36,9 +36,9 @@
           <input id="businessOther" type="text" placeholder="Diğer işletme tipini yazınız" disabled>
         </div>
         <div class="grid two">
-          <div class="field"><label>İşletme Tabela Adı <span>*</span></label><input name="tradeName" required></div>
-          <div class="field"><label>İşletme Sahibi Ad-Soyad <span>*</span></label><input name="ownerName" required></div>
-          <div class="field"><label>İşletme Sahibi Telefon No <span>*</span></label><input name="ownerPhone" type="tel" inputmode="tel" required></div>
+          <div class="field"><label>İşletme Tabela Adı</label><input name="tradeName"></div>
+          <div class="field"><label>İşletme Sahibi Ad-Soyad</label><input name="ownerName"></div>
+          <div class="field"><label>İşletme Sahibi Telefon No</label><input name="ownerPhone" type="tel" inputmode="tel"></div>
           <div class="field"><label>İşletme Ortakları Ad-Soyad <span>*</span></label><input name="partnersName" required placeholder="Ortak yoksa 'Yok' yazınız"></div>
           <div class="field"><label>Ortaklar Telefon No <span>*</span></label><input name="partnersPhone" required placeholder="Ortak yoksa 'Yok' yazınız"></div>
           <div class="field"><label>Yetkili Satış Sorumlusu <span>*</span></label><input name="salesContact" required></div>
@@ -47,7 +47,7 @@
           <div class="field"><label>İmza Yetkilisi Telefon No <span>*</span></label><input name="signatoryPhone" type="tel" required></div>
           <div class="field"><label>Ödeme Yetkilisi Ad-Soyad <span>*</span></label><input name="paymentContact" required></div>
           <div class="field"><label>Ödeme Yetkilisi Telefon No <span>*</span></label><input name="paymentPhone" type="tel" required></div>
-          <div class="field"><label>Resmi Yazışma Mail Adresi <span>*</span></label><input name="officialEmail" type="email" required></div>
+          <div class="field"><label>Resmi Yazışma Mail Adresi</label><input name="officialEmail" type="email"></div>
           <div class="field"><label>Alternatif Mail Adresi <span>*</span></label><input name="alternateEmail" type="email" required></div>
         </div>
       </section>
@@ -55,36 +55,29 @@
       <section class="card">
         <h2>2. Cari Açılış Koşulları</h2>
         <div class="grid two">
-          <div class="field"><label>Satış Temsilcisi <span>*</span></label><input name="salesRepresentative" required></div>
-          <div class="field"><label>Müşteri Sınıfı <span>*</span></label><input name="customerClass" required></div>
-          <div class="field"><label>Vade <span>*</span></label><input name="term" required placeholder="Örn. 30 gün"></div>
-          <div class="field"><label>Risk Limiti <span>*</span></label><input name="riskLimit" inputmode="decimal" required></div>
+          <div class="field"><label>Satış Temsilcisi</label><input name="salesRepresentative"></div>
+          <div class="field"><label>Müşteri Sınıfı</label><input name="customerClass"></div>
+          <div class="field"><label>Vade</label><input name="term" placeholder="Örn. 30 gün"></div>
+          <div class="field"><label>Risk Limiti</label><input name="riskLimit" inputmode="decimal"></div>
         </div>
         <div class="field">
-          <label>Ziyaret sıklığı <span>*</span> <small>(Birden fazla seçilebilir)</small></label>
+          <label>Ziyaret sıklığı <small>(Birden fazla seçilebilir)</small></label>
           <div class="checks" id="visitFrequencies">
             <label><input type="checkbox" value="Haftada bir">Haftada bir</label>
             <label><input type="checkbox" value="Ayda bir">Ayda bir</label>
             <label><input type="checkbox" value="İki haftada bir">İki haftada bir</label>
+            <label><input type="checkbox" value="1-3">1-3</label>
+            <label><input type="checkbox" value="2-4">2-4</label>
             <label><input type="checkbox" value="Diğer" data-other-target="visitOther">Diğer</label>
           </div>
           <input id="visitOther" type="text" placeholder="Diğer ziyaret sıklığını yazınız" disabled>
         </div>
-        <div class="field"><label>Ziyaret Günü <span>*</span></label>
-          <select name="visitDay" required><option value="">Seçiniz</option><option>Pazartesi</option><option>Salı</option><option>Çarşamba</option><option>Perşembe</option><option>Cuma</option><option>Cumartesi</option><option>Pazar</option><option>Değişken</option></select>
+        <div class="field"><label>Ziyaret Günü</label>
+          <select name="visitDay"><option value="">Seçiniz</option><option>Pazartesi</option><option>Salı</option><option>Çarşamba</option><option>Perşembe</option><option>Cuma</option><option>Cumartesi</option><option>Pazar</option><option>Değişken</option></select>
         </div>
       </section>
-
-      <section class="card">
-        <h2>3. Google Koordinat Bilgileri</h2>
-        <p class="hint">İş yeri ve depo adreslerinin Google koordinatlarını giriniz. İlk koordinat zorunludur; 2 ve 3 isteğe bağlıdır.</p>
-        <div class="coord"><b>Koordinat 1 *</b><input name="coord1x" required placeholder="X / Enlem"><input name="coord1y" required placeholder="Y / Boylam"></div>
-        <div class="coord"><b>Koordinat 2</b><input name="coord2x" placeholder="X / Enlem"><input name="coord2y" placeholder="Y / Boylam"></div>
-        <div class="coord"><b>Koordinat 3</b><input name="coord3x" placeholder="X / Enlem"><input name="coord3y" placeholder="Y / Boylam"></div>
-      </section>
-
       <section class="card upload-card" id="companyDocsSection">
-        <h2>4A. Şirketlerde Gerekli Evraklar (İSTEĞE BAĞLI)</h2>
+        <h2>3A. Şirketlerde Gerekli Evraklar (İSTEĞE BAĞLI)</h2>
         <p class="hint upload-note">Aşağıdaki evrakların yüklenmesi isteğe bağlıdır. Bir veya birden fazla dosya ekleyebilirsiniz.</p>
         <ol id="companyDocList"></ol>
         <label class="upload-btn"><input id="companyFiles" type="file" multiple hidden>Dosyaları Seç / Ekle</label>
@@ -92,7 +85,7 @@
       </section>
 
       <section class="card upload-card" id="soleDocsSection">
-        <h2>4B. Şahıs Firmalarında Gerekli Evraklar (İSTEĞE BAĞLI)</h2>
+        <h2>3B. Şahıs Firmalarında Gerekli Evraklar (İSTEĞE BAĞLI)</h2>
         <p class="hint upload-note">Aşağıdaki evrakların yüklenmesi isteğe bağlıdır. Bir veya birden fazla dosya ekleyebilirsiniz.</p>
         <ol id="soleDocList"></ol>
         <label class="upload-btn"><input id="soleFiles" type="file" multiple hidden>Dosyaları Seç / Ekle</label>
@@ -100,18 +93,18 @@
       </section>
 
       <section class="card">
-        <h2>5. Tarih ve Dijital İmzalar</h2>
-        <div class="field"><label>Form Tarihi <span>*</span></label><input id="formDate" name="formDate" type="date" required readonly aria-readonly="true" title="Form tarihi otomatik olarak belirlenir"></div>
+        <h2>4. Tarih ve Dijital İmzalar</h2>
+        <div class="field"><label>Form Tarihi</label><input id="formDate" name="formDate" type="date" readonly aria-readonly="true" title="Form tarihi otomatik olarak belirlenir"></div>
         <div class="sign-grid">
           <div class="signature-box">
-            <label>Cari açılış onaylayan (İsim & İmza) <span>*</span></label>
-            <input name="approverName" required placeholder="Ad Soyad">
+            <label>Cari açılış onaylayan (İsim & İmza)</label>
+            <input name="approverName" placeholder="Ad Soyad">
             <canvas id="approverSignature"></canvas>
             <button type="button" class="secondary clear-sign" data-canvas="approverSignature">İmzayı Temizle</button>
           </div>
           <div class="signature-box">
-            <label>Görüşmeyi yapan (İsim & İmza) <span>*</span></label>
-            <input name="interviewerName" required placeholder="Ad Soyad">
+            <label>Görüşmeyi yapan (İsim & İmza)</label>
+            <input name="interviewerName" placeholder="Ad Soyad">
             <canvas id="interviewerSignature"></canvas>
             <button type="button" class="secondary clear-sign" data-canvas="interviewerSignature">İmzayı Temizle</button>
           </div>
@@ -119,7 +112,7 @@
       </section>
 
       <section class="card consent">
-        <label><input id="accuracyConsent" type="checkbox" required> Form bilgilerinin doğru olduğunu onaylıyorum. Evrak yüklemenin isteğe bağlı olduğunu biliyorum. <span>*</span></label>
+        <label><input id="accuracyConsent" type="checkbox"> Form bilgilerinin doğru olduğunu onaylıyorum. Evrak yüklemenin isteğe bağlı olduğunu biliyorum.</label>
       </section>
 
       <div id="status" role="status" aria-live="polite"></div>
